@@ -1,14 +1,18 @@
-apiVersion: v1
-kind: Service
+apiVersion: argoproj.io/v1alpha1
+kind: Application
 metadata:
-  name: simple-k8s-node-project-service
+  name: my-app
+  namespace: argocd
 spec:
-  ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 3000
-  selector:
-    app: simple-k8s-node-project
-  type: LoadBalancer
-status:
-  loadBalancer: {}
+  project: default
+  source:
+    repoURL: https://github.com/Kiran-Kumar-K17/simple-k8s-node-Project.git
+    targetRevision: main
+    path: .
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
